@@ -4,12 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kg.talantova.shoppingcart.DTO.product.ProductCreateDTO;
 import kg.talantova.shoppingcart.DTO.product.ProductResponseDTO;
+import kg.talantova.shoppingcart.DTO.product.ProductUpdateDTO;
 import kg.talantova.shoppingcart.service.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,5 +24,14 @@ public class ProductController {
     )
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductCreateDTO newProduct) {
         return productService.createProduct(newProduct);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Изменение существующего товара"
+    )
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") Long id,
+                                                            @Valid @RequestBody ProductUpdateDTO updatedProduct) {
+        return productService.updateProduct(id, updatedProduct);
     }
 }

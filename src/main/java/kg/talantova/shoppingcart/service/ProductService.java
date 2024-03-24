@@ -2,7 +2,9 @@ package kg.talantova.shoppingcart.service;
 
 import kg.talantova.shoppingcart.DTO.product.ProductCreateDTO;
 import kg.talantova.shoppingcart.DTO.product.ProductResponseDTO;
+import kg.talantova.shoppingcart.DTO.product.ProductUpdateDTO;
 import kg.talantova.shoppingcart.entity.Product;
+import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
 import kg.talantova.shoppingcart.mapper.ProductMapper;
 import kg.talantova.shoppingcart.repository.ProductRepository;
@@ -33,5 +35,18 @@ public class ProductService {
     }
 
 
-
+    public ResponseEntity<ProductResponseDTO> updateProduct(Long id, ProductUpdateDTO updatedProduct) {
+        if(productRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Product with such id does not exist");
+        }
+        Product productEntity = productRepository.findById(id).get();
+        productEntity.setName(updatedProduct.getName());
+        productEntity.setShortDescription(updatedProduct.getShortDescription());
+        productEntity.setAvailable(updatedProduct.isAvailable());
+        productEntity.setRating(updatedProduct.getRating());
+        productEntity.setPrice(updatedProduct.getPrice());
+        productEntity.setQuantity(updatedProduct.getQuantity());
+        productRepository.save(productEntity);
+        return new ResponseEntity<>(productMapper.toResponse(productEntity), HttpStatus.OK);
+    }
 }

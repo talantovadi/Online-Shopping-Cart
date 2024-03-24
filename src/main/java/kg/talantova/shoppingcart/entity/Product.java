@@ -13,10 +13,10 @@ public class Product {
     @Column(unique = true)
     private String name;
     private String shortDescription;
-    private int quantity;
+    private Integer quantity;
     private boolean isAvailable;
-    private int rating;
-    private double price;
+    private Integer rating;
+    private Double price;
 
     @ManyToMany(mappedBy = "userCart")
     private List<User> users;
