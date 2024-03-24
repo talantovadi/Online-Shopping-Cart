@@ -16,7 +16,7 @@ public class User {
 
     @Column(length = 150, unique = true)
     private String email;
-    @Column(length = 150, unique = true)
+
     private String password;
     @ManyToMany()
     @JoinTable(

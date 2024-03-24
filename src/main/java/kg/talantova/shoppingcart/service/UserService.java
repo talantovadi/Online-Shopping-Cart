@@ -8,6 +8,8 @@ import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
 import kg.talantova.shoppingcart.mapper.UserMapper;
 import kg.talantova.shoppingcart.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,19 @@ public class UserService {
         this.mapper = mapper;
     }
 
+    public ResponseEntity<Page<UserResponseDTO>> getAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+
+        return new ResponseEntity<>(mapper.toUserResponsePage(users), HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserResponseDTO> getUser(Long id) {
+        if(userRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("User with such id was not found ");
+        }
+        User userEntity = userRepository.findById(id).get();
+        return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
+    }
     public ResponseEntity<UserResponseDTO> createUser(UserCreateDTO user) {
         if(!user.getPassword().equals(user.getConfirmPassword())) {
             throw new NotValidException("Your password and confirm password not equals");
