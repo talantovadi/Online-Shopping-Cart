@@ -32,14 +32,14 @@ public class CartController {
                                                       @PathVariable("user-id") Long userId) {
         return cartService.deleteProduct(productId, userId);
     }
-//
-//    @GetMapping("/empty-cart/{user-id}")
-//    @Operation(
-//            summary = "Удаление всех товаров из моей корзины "
-//    )
-//    public ResponseEntity<Void> emtyCart() {
-//
-//    }
+
+    @GetMapping("/empty-cart/{user-id}")
+    @Operation(
+            summary = "Удаление всех товаров из моей корзины "
+    )
+    public ResponseEntity<Void> emptyCart( @PathVariable("user-id") Long userId) {
+        return cartService.emptyCart(userId);
+    }
 //
 //
 //    @GetMapping("/purchase/{user-id}")

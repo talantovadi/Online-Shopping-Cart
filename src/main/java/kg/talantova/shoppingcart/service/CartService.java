@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 @Service
 @Transactional
 public class CartService {
@@ -49,6 +51,15 @@ public class CartService {
         }
         user.getUserCart().remove(product);
         product.getUsers().remove(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> emptyCart(Long userId) {
+        if(userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("User with such id was not found ");
+        }
+        User user = userRepository.findById(userId).get();
+        user.setUserCart(Collections.emptyList());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
