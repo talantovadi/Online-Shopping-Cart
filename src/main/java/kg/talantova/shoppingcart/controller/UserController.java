@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kg.talantova.shoppingcart.DTO.UserCreateDTO;
 import kg.talantova.shoppingcart.DTO.UserResponseDTO;
+import kg.talantova.shoppingcart.DTO.UserUpdateDTO;
 import kg.talantova.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,13 @@ public class UserController {
         return userService.createUser(userRequest);
     }
 
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Изменить существующего пользователя"
+    )
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable("id") Long userId,
+                                                      @Valid @RequestBody UserUpdateDTO updatedUser) {
+        return userService.updateUser(updatedUser, userId);
+    }
 
 }
