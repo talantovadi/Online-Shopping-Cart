@@ -40,15 +40,15 @@ public class CartController {
     public ResponseEntity<Void> emptyCart( @PathVariable("user-id") Long userId) {
         return cartService.emptyCart(userId);
     }
-//
-//
-//    @GetMapping("/purchase/{user-id}")
-//    @Operation(
-//            summary = "Покупка товаров в моей корзине"
-//    )
-//    public ResponseEntity<Void> purchaseProductsFromCart() {
-//
-//    }
+
+
+    @GetMapping("/purchase/{user-id}")
+    @Operation(
+            summary = "Покупка товаров в моей корзине"
+    )
+    public ResponseEntity<Void> purchaseProductsFromCart( @PathVariable("user-id") Long userId) {
+        return cartService.purchase(userId);
+    }
 //
 //    @GetMapping()
 //    @Operation(

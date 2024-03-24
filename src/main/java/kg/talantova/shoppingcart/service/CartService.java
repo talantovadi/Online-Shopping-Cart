@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -32,6 +33,9 @@ public class CartService {
         }
         User user = userRepository.findById(userId).get();
         Product product = productRepository.findById(productId).get();
+        if(product.getQuantity() < 1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         user.getUserCart().add(product);
         product.getUsers().add(user);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -59,6 +63,22 @@ public class CartService {
             throw new NotFoundException("User with such id was not found ");
         }
         User user = userRepository.findById(userId).get();
+        user.setUserCart(Collections.emptyList());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> purchase(Long userId) {
+        if(userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("User with such id was not found ");
+        }
+        User user = userRepository.findById(userId).get();
+        if(user.getUserCart().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Product> myProducts = user.getUserCart();
+        for(Product product: myProducts) {
+            product.setQuantity(product.getQuantity() - 1);
+        }
         user.setUserCart(Collections.emptyList());
         return new ResponseEntity<>(HttpStatus.OK);
     }
