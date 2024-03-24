@@ -1,6 +1,7 @@
 package kg.talantova.shoppingcart.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/hello")
+@Tag(
+        name = "Контроллер для приветствия",
+        description = "В этом контроллере есть один метод для получения фразы hello"
+)
 public class HelloController {
 
     @GetMapping
