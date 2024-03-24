@@ -34,4 +34,21 @@ public class CartService {
         product.getUsers().add(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    public ResponseEntity<Void> deleteProduct(Long productId, Long userId) {
+        if(productRepository.findById(productId).isEmpty()) {
+            throw new NotFoundException("Product with such id does not exist");
+        }
+        if(userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("User with such id was not found ");
+        }
+        User user = userRepository.findById(userId).get();
+        Product product = productRepository.findById(productId).get();
+        if(!user.getUserCart().contains(product)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        user.getUserCart().remove(product);
+        product.getUsers().remove(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

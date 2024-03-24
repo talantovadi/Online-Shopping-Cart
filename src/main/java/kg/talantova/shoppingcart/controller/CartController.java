@@ -24,14 +24,14 @@ public class CartController {
         return cartService.addProduct(productId, userId);
     }
 
-//    @DeleteMapping("/delete-product/{product-id}/{user-id}")
-//    @Operation(
-//            summary = "Удаление товара из моей корзины по его id "
-//    )
-//    public ResponseEntity<Void> deleteProductFromCart(@PathVariable("product-id") Long productId,
-//                                                      @PathVariable("user-id") Long userId) {
-//
-//    }
+    @DeleteMapping("/delete-product/{product-id}/{user-id}")
+    @Operation(
+            summary = "Удаление товара из моей корзины по его id "
+    )
+    public ResponseEntity<Void> deleteProductFromCart(@PathVariable("product-id") Long productId,
+                                                      @PathVariable("user-id") Long userId) {
+        return cartService.deleteProduct(productId, userId);
+    }
 //
 //    @GetMapping("/empty-cart/{user-id}")
 //    @Operation(
