@@ -69,4 +69,11 @@ public class UserService {
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
 
+    public ResponseEntity<Void> deleteUser(Long id) {
+        if(userRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("User with such id was not found ");
+        }
+        userRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
