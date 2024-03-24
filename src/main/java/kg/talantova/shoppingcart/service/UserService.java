@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 @Service
 @Transactional
 public class UserService {
@@ -49,6 +51,7 @@ public class UserService {
             throw new NotValidException("User with that email address is already exist");
         }
         User userEntity = mapper.toEntity(user);
+        userEntity.setUserCart(Collections.emptyList());
         userRepository.save(userEntity);
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }

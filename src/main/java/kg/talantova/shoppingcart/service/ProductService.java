@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -43,6 +45,7 @@ public class ProductService {
             throw new NotValidException("Product with such name is already exist ");
         }
         Product productEntity = productMapper.toEntity(newProduct);
+        productEntity.setUsers(Collections.emptyList());
         productEntity.setAvailable(true);
         productEntity.setRating(0);
         productRepository.save(productEntity);
