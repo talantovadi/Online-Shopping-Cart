@@ -13,7 +13,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private String avatar;
+
     @Column(length = 150, unique = true)
     private String email;
     @Column(length = 150, unique = true)
@@ -25,12 +25,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> userCart;
 
-    public User(Long id, String firstName, String lastName, String phone, String avatar, String email, String password, List<Product> userCart) {
+    public User(Long id, String firstName, String lastName, String phone, String email, String password, List<Product> userCart) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.avatar = avatar;
         this.email = email;
         this.password = password;
         this.userCart = userCart;
@@ -71,13 +70,7 @@ public class User {
         this.phone = phone;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 
     public String getEmail() {
         return email;
