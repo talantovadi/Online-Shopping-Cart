@@ -3,6 +3,10 @@ package kg.talantova.shoppingcart.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import kg.talantova.shoppingcart.DTO.product.ProductResponseDTO;
 import kg.talantova.shoppingcart.service.CartService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,13 +53,14 @@ public class CartController {
     public ResponseEntity<Void> purchaseProductsFromCart( @PathVariable("user-id") Long userId) {
         return cartService.purchase(userId);
     }
-//
-//    @GetMapping()
-//    @Operation(
-//            summary = "Посмотреть все товары в моей корзине"
-//    )
-//    public ResponseEntity<ProductResponseDTO> getAllProductsInMyCart() {
-//
-//    }
+
+    @GetMapping("{user-id}")
+    @Operation(
+            summary = "Посмотреть все товары в моей корзине"
+    )
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProductsInMyCart(@PathVariable("user-id") Long userId,
+                                                                           @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.DESC) Pageable pageable) {
+        return cartService.getAllMyProducts(userId, pageable);
+    }
 
 }
