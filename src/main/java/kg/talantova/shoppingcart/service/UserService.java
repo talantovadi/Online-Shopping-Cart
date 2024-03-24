@@ -1,8 +1,8 @@
 package kg.talantova.shoppingcart.service;
 
-import kg.talantova.shoppingcart.DTO.UserCreateDTO;
-import kg.talantova.shoppingcart.DTO.UserResponseDTO;
-import kg.talantova.shoppingcart.DTO.UserUpdateDTO;
+import kg.talantova.shoppingcart.DTO.user.UserCreateDTO;
+import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
+import kg.talantova.shoppingcart.DTO.user.UserUpdateDTO;
 import kg.talantova.shoppingcart.entity.User;
 import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;

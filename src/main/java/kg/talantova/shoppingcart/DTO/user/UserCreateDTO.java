@@ -1,4 +1,4 @@
-package kg.talantova.shoppingcart.DTO;
+package kg.talantova.shoppingcart.DTO.user;
 
 
 import jakarta.validation.constraints.Email;

@@ -1,16 +1,8 @@
-package kg.talantova.shoppingcart.entity;
+package kg.talantova.shoppingcart.DTO.product;
 
-import jakarta.persistence.*;
 
-import java.util.List;
-
-@Entity
-@Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductResponseDTO {
     private Long id;
-    @Column(unique = true)
     private String name;
     private String shortDescription;
     private int quantity;
@@ -18,15 +10,7 @@ public class Product {
     private int rating;
     private double price;
 
-    @ManyToMany(mappedBy = "userCart")
-    private List<User> users;
-
-
-
-    public Product() {
-    }
-
-    public Product(Long id, String name, String shortDescription, int quantity, boolean isAvailable, int rating, double price, List<User> users) {
+    public ProductResponseDTO(Long id, String name, String shortDescription, int quantity, boolean isAvailable, int rating, double price) {
         this.id = id;
         this.name = name;
         this.shortDescription = shortDescription;
@@ -34,7 +18,6 @@ public class Product {
         this.isAvailable = isAvailable;
         this.rating = rating;
         this.price = price;
-        this.users = users;
     }
 
     public Long getId() {
@@ -60,7 +43,6 @@ public class Product {
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
-
 
     public int getQuantity() {
         return quantity;
@@ -92,13 +74,5 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

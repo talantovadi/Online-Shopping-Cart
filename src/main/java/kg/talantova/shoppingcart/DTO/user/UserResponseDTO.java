@@ -1,17 +1,29 @@
-package kg.talantova.shoppingcart.DTO;
+package kg.talantova.shoppingcart.DTO.user;
 
-public class UserUpdateDTO {
+import jakarta.persistence.Column;
+
+public class UserResponseDTO {
+    private Long id;
     private String firstName;
     private String lastName;
     private String phone;
 
     private String email;
 
-    public UserUpdateDTO(String firstName, String lastName, String phone, String email) {
+    public UserResponseDTO(Long id, String firstName, String lastName, String phone,  String email) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -37,6 +49,7 @@ public class UserUpdateDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 
     public String getEmail() {
         return email;
