@@ -6,6 +6,10 @@ import kg.talantova.shoppingcart.DTO.product.ProductCreateDTO;
 import kg.talantova.shoppingcart.DTO.product.ProductResponseDTO;
 import kg.talantova.shoppingcart.DTO.product.ProductUpdateDTO;
 import kg.talantova.shoppingcart.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +20,22 @@ public class ProductController {
 
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @GetMapping
+    @Operation(
+            summary = "Получение всех товаров "
+    )
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.DESC) Pageable pageable) {
+        return productService.getAll(pageable);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Получение товара по его id  "
+    )
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable("id") Long id) {
+        return productService.getProduct(id);
     }
 
     @PostMapping

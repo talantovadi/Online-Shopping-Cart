@@ -8,6 +8,8 @@ import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
 import kg.talantova.shoppingcart.mapper.ProductMapper;
 import kg.talantova.shoppingcart.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,19 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
+    public ResponseEntity<Page<ProductResponseDTO>> getAll(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return new ResponseEntity<>(productMapper.toProductResponsePage(products), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ProductResponseDTO> getProduct(Long id) {
+        if(productRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Product with such id does not exist");
+        }
+        Product product = productRepository.findById(id).get();
+        return new ResponseEntity<>(productMapper.toResponse(product), HttpStatus.OK);
+    }
     public ResponseEntity<ProductResponseDTO> createProduct(ProductCreateDTO newProduct) {
         if(productRepository.findByName(newProduct.getName()).isPresent()) {
             throw new NotValidException("Product with such name is already exist ");
