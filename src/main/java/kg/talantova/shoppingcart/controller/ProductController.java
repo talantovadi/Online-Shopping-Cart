@@ -34,4 +34,11 @@ public class ProductController {
                                                             @Valid @RequestBody ProductUpdateDTO updatedProduct) {
         return productService.updateProduct(id, updatedProduct);
     }
+    @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Удаление существующего товара по его id "
+    )
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
+        return productService.deleteProduct(id);
+    }
 }

@@ -49,4 +49,13 @@ public class ProductService {
         productRepository.save(productEntity);
         return new ResponseEntity<>(productMapper.toResponse(productEntity), HttpStatus.OK);
     }
+
+    public ResponseEntity<Void> deleteProduct(Long id) {
+        if(productRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Product with such id does not exist");
+        }
+
+        productRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
