@@ -9,25 +9,25 @@ import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserCreateDTO {
-    @NotBlank
+    @NotBlank(message = "Имя - обязательное поле ")
     @Size(min = 3, max = 50, message = "First name should be between 3 and 50 characters")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "Фамилия - обязательное поле ")
     @Size(min = 3, max = 50, message = "Last name should be between 3 and 50 characters")
     private String lastName;
-    @NotBlank
+    @NotBlank(message = "Укажите номер телефона")
     @Size(min = 10, max = 30, message = "Phone should be between 10 and 30characters")
     @Pattern(regexp = "^\\+?[0-9]+$", message = "Phone number should have only numbers")
     private String phone;
-    @NotBlank
+    @NotBlank(message = "Укажите ваш email адрес")
     @Size(max = 150, message = "Email should be less than 150 characters")
     @Email(message = "Enter valid email address")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Укажите ваш пароль")
     @Size(max = 150, message = "Password should be less than 150 characters")
     private String password;
-    @NotBlank
+    @NotBlank(message = "Введите пароль повторно")
     @Size(max = 150, message = "ConfirmPassword should be less than 150 characters")
     private String confirmPassword;
 

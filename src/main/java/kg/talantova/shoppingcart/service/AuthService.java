@@ -5,6 +5,7 @@ import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
 import kg.talantova.shoppingcart.DTO.user.UserSignInRequest;
 import kg.talantova.shoppingcart.DTO.user.UserSignInResponse;
 import kg.talantova.shoppingcart.entity.User;
+import kg.talantova.shoppingcart.enums.Roles;
 import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
 import kg.talantova.shoppingcart.mapper.UserMapper;
@@ -60,6 +61,8 @@ public class AuthService {
         }
         User userEntity = mapper.toEntity(user);
         userEntity.setUserCart(Collections.emptyList());
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.setRole(Roles.ROLE_USER);
         userRepository.save(userEntity);
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
