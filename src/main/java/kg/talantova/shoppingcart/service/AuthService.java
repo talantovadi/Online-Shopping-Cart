@@ -1,9 +1,11 @@
 package kg.talantova.shoppingcart.service;
 
+import kg.talantova.shoppingcart.DTO.token.RefreshTokenRequestDTO;
 import kg.talantova.shoppingcart.DTO.user.UserCreateDTO;
 import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
 import kg.talantova.shoppingcart.DTO.user.UserSignInRequest;
 import kg.talantova.shoppingcart.DTO.user.UserSignInResponse;
+import kg.talantova.shoppingcart.entity.RefreshToken;
 import kg.talantova.shoppingcart.entity.User;
 import kg.talantova.shoppingcart.enums.Roles;
 import kg.talantova.shoppingcart.exception.NotFoundException;
@@ -30,6 +32,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserMapper mapper;
+    private final RefreshTokenService refreshTokenService;
 
     public ResponseEntity<UserSignInResponse> authenticate(UserSignInRequest userRequest) {
         User userEntity = userRepository.findByEmail(userRequest.getEmail())
@@ -47,7 +50,8 @@ public class AuthService {
         );
 
         String jwtToken = jwtService.generateToken(userEntity);
-        UserSignInResponse response = new UserSignInResponse(jwtToken);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userRequest.getEmail());
+        UserSignInResponse response = new UserSignInResponse(jwtToken, refreshToken.getToken());
 
         return ResponseEntity.ok(response);
     }
@@ -66,4 +70,15 @@ public class AuthService {
         userRepository.save(userEntity);
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
+
+    public ResponseEntity<UserSignInResponse> refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String accessToken = jwtService.generateToken(user);
+                    return new ResponseEntity(new UserSignInResponse(accessToken, refreshTokenRequestDTO.getToken()), HttpStatus.OK);
+                }).orElseThrow(() ->new RuntimeException("Refresh Token is not in DB..!!"));
+    }
 }
+

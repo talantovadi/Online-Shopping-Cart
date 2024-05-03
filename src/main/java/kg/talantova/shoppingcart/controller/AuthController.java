@@ -3,6 +3,7 @@ package kg.talantova.shoppingcart.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import kg.talantova.shoppingcart.DTO.token.RefreshTokenRequestDTO;
 import kg.talantova.shoppingcart.DTO.user.UserCreateDTO;
 import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
 import kg.talantova.shoppingcart.DTO.user.UserSignInRequest;
@@ -42,5 +43,8 @@ public class AuthController {
         return authService.authenticate(userRequest);
     }
 
-
+    @PostMapping("/refresh-token")
+    public ResponseEntity<UserSignInResponse> refreshTokens(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        return authService.refreshToken(refreshTokenRequestDTO);
+    }
 }
