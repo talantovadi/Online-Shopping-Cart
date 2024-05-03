@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,6 +39,7 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(
             summary = "Создание нового товара"
@@ -46,6 +48,7 @@ public class ProductController {
         return productService.createProduct(newProduct);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(
             summary = "Изменение существующего товара"
@@ -54,6 +57,8 @@ public class ProductController {
                                                             @Valid @RequestBody ProductUpdateDTO updatedProduct) {
         return productService.updateProduct(id, updatedProduct);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Удаление существующего товара по его id "

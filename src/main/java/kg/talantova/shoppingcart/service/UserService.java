@@ -2,6 +2,7 @@ package kg.talantova.shoppingcart.service;
 
 import kg.talantova.shoppingcart.DTO.user.*;
 import kg.talantova.shoppingcart.entity.User;
+import kg.talantova.shoppingcart.exception.NoAccessException;
 import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
 import kg.talantova.shoppingcart.mapper.UserMapper;
@@ -34,25 +35,32 @@ public class UserService {
         return new ResponseEntity<>(mapper.toUserResponsePage(users), HttpStatus.OK);
     }
 
-    public ResponseEntity<UserResponseDTO> getUser(Long id) {
-        if(userRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("User with such id was not found ");
+    public ResponseEntity<UserResponseDTO> getUser(Long id, User currentUser) {
+        User userEntity = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User with such id was not found ")
+        );
+
+        if(!userEntity.getId().equals(currentUser.getId())) {
+            throw new NoAccessException("Вы не можете посмотреть данные другого пользователя, " +
+                    "вы не сам пользователь и не администратор");
         }
-        User userEntity = userRepository.findById(id).get();
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
 
 
 
-    public ResponseEntity<UserResponseDTO> updateUser(UserUpdateDTO updatedUser, Long id) {
-        if(userRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("User with such id was not found ");
-        }
+    public ResponseEntity<UserResponseDTO> updateUser(UserUpdateDTO updatedUser, Long id, User currentUser) {
+        User userEntity = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User with such id was not found ")
+        );
+
         if(userRepository.findByEmail(updatedUser.getEmail()).isPresent() &&
                 !userRepository.findByEmail(updatedUser.getEmail()).get().getId().equals(id)) {
             throw new NotValidException("User with that email address is already exist");
         }
-        User userEntity = userRepository.findById(id).get();
+        if(!userEntity.getId().equals(currentUser.getId())) {
+            throw new NoAccessException("Вы не можете изменить данные другого пользователя");
+        }
         userEntity.setFirstName(updatedUser.getFirstName());
         userEntity.setLastName(updatedUser.getLastName());
         userEntity.setEmail(updatedUser.getEmail());
@@ -60,9 +68,12 @@ public class UserService {
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> deleteUser(Long id) {
-        if(userRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("User with such id was not found ");
+    public ResponseEntity<Void> deleteUser(Long id, User currentUser) {
+        User userEntity = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User with such id was not found ")
+        );
+        if(!userEntity.getId().equals(currentUser.getId())) {
+            throw new NoAccessException("Вы не можете удалить аккаунт другого пользователя");
         }
         userRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);

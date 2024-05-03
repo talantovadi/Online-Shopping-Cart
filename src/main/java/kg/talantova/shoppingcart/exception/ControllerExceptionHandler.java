@@ -40,4 +40,10 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(NoAccessException.class)
+    public ResponseEntity<String> handleNoAccessException(NoAccessException exc) {
+        return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
