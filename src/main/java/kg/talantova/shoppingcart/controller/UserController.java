@@ -42,13 +42,6 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @PostMapping
-    @Operation(
-            summary = "Создать нового пользователя"
-    )
-    public ResponseEntity<UserResponseDTO> signUp(@Valid @RequestBody UserCreateDTO userRequest) {
-        return userService.createUser(userRequest);
-    }
 
     @PutMapping("/{id}")
     @Operation(

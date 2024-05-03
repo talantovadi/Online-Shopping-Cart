@@ -35,7 +35,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts
-                .parserBuilder()
+                .parser()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
@@ -53,22 +53,27 @@ public class JwtService {
 
 
 
-    public String GenerateToken(String username){
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
     }
 
+    public String generateToken(Map<String, Object> extractClaims,
+                                UserDetails userDetails) {
+        return buildToken(extractClaims, userDetails);
+    }
 
-
-    private String createToken(Map<String, Object> claims, String username) {
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(username)
+    private String buildToken(Map<String, Object> extractClaims,
+                              UserDetails userDetails) {
+        return Jwts
+                .builder()
+                .setClaims(extractClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME_MILLIS))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
+
 
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);

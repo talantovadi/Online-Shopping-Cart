@@ -1,8 +1,6 @@
 package kg.talantova.shoppingcart.service;
 
-import kg.talantova.shoppingcart.DTO.user.UserCreateDTO;
-import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
-import kg.talantova.shoppingcart.DTO.user.UserUpdateDTO;
+import kg.talantova.shoppingcart.DTO.user.*;
 import kg.talantova.shoppingcart.entity.User;
 import kg.talantova.shoppingcart.exception.NotFoundException;
 import kg.talantova.shoppingcart.exception.NotValidException;
@@ -43,18 +41,8 @@ public class UserService {
         User userEntity = userRepository.findById(id).get();
         return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
     }
-    public ResponseEntity<UserResponseDTO> createUser(UserCreateDTO user) {
-        if(!user.getPassword().equals(user.getConfirmPassword())) {
-            throw new NotValidException("Your password and confirm password not equals");
-        }
-        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new NotValidException("User with that email address is already exist");
-        }
-        User userEntity = mapper.toEntity(user);
-        userEntity.setUserCart(Collections.emptyList());
-        userRepository.save(userEntity);
-        return new ResponseEntity<>(mapper.toUserResponse(userEntity), HttpStatus.OK);
-    }
+
+
 
     public ResponseEntity<UserResponseDTO> updateUser(UserUpdateDTO updatedUser, Long id) {
         if(userRepository.findById(id).isEmpty()) {
