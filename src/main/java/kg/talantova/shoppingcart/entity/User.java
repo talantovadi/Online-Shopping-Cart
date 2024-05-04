@@ -2,6 +2,7 @@ package kg.talantova.shoppingcart.entity;
 
 import jakarta.persistence.*;
 import kg.talantova.shoppingcart.enums.Roles;
+import kg.talantova.shoppingcart.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,12 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
+
+    @OneToOne(mappedBy = "user")
+    private ConfirmationToken confirmationToken;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,6 +2,7 @@ package kg.talantova.shoppingcart.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kg.talantova.shoppingcart.DTO.token.RefreshTokenRequestDTO;
 import kg.talantova.shoppingcart.DTO.user.UserCreateDTO;
@@ -9,10 +10,7 @@ import kg.talantova.shoppingcart.DTO.user.UserResponseDTO;
 import kg.talantova.shoppingcart.DTO.user.UserSignInRequest;
 import kg.talantova.shoppingcart.DTO.user.UserSignInResponse;
 import kg.talantova.shoppingcart.service.AuthService;
-import kg.talantova.shoppingcart.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +27,9 @@ public class AuthController {
     @Operation(
             summary = "Зарегистрировать новый аккаунт"
     )
-    public ResponseEntity<UserResponseDTO> signUp(@Valid @RequestBody UserCreateDTO userRequest) {
-        return authService.createUser(userRequest);
+    public ResponseEntity<UserResponseDTO> signUp(@Valid @RequestBody UserCreateDTO userRequest,
+                                                  HttpServletRequest servletRequest) {
+        return authService.createUser(userRequest, servletRequest);
     }
 
 
@@ -46,5 +45,13 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<UserSignInResponse> refreshTokens(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
         return authService.refreshToken(refreshTokenRequestDTO);
+    }
+
+    @GetMapping("/verify")
+    @Operation(
+            summary = "Проверка пользователя через почту"
+    )
+    public ResponseEntity<String> verificationByEmail(@RequestParam("token") String token){
+        return authService.checkUserVerify(token);
     }
 }
